@@ -130,14 +130,16 @@
         }
 
         .hero-images {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .hero-images img {
             width: 100%;
-            height: 250px;
+            max-width: 500px;
+            height: auto;
+            aspect-ratio: 1;
             object-fit: cover;
             border-radius: 12px;
             transition: transform 0.3s;
@@ -554,7 +556,7 @@
             }
 
             .hero-images {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: 1fr;
             }
 
             .timeline {
@@ -616,9 +618,7 @@
                     <p>Author of AWS Security Series with 1M+ impressions on Twitter. Published articles for Detectify, ProjectDiscovery, Trickest, WPSec, and Spearbit.</p>
                 </div>
                 <div class="hero-images">
-                    <img src="Devansh Bordia_PhonePe_Photo.jpg" alt="Profile 1">
-                    <img src="Devansh Bordia_PhonePe_Photo.jpg" alt="Profile 2">
-                    <img src="Devansh Bordia_PhonePe_Photo.jpg" alt="Profile 3">
+                    <img src="Devansh Bordia_PhonePe_Photo.jpg" alt="Devansh Bordia">
                 </div>
             </div>
         </div>
