@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devansh Bordia - Security Engineer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0a0a0a;
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+
+        /* Header Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: rgba(10, 10, 10, 0.95);
+            padding: 1.5rem 5%;
+            z-index: 1000;
+            border-bottom: 1px solid #222;
+            backdrop-filter: blur(10px);
+        }
+
+        nav {
+            display: flex;
+            justify-content: flex-end;
+            gap: 2.5rem;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: #e0e0e0;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #ff4757;
+            transition: width 0.3s;
+        }
+
+        nav a:hover::after,
+        nav a.active::after {
+            width: 100%;
+        }
+
+        nav a:hover,
+        nav a.active {
+            color: #ff4757;
+        }
+
+        /* Page Container */
+        .page {
+            display: none;
+            min-height: 100vh;
+            padding: 120px 5% 60px;
+            animation: fadeIn 0.5s;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: calc(100vh - 180px);
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-text h1 {
+            font-size: 4.5rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            background: linear-gradient(135deg, #ff4757, #ff6b81);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-text .subtitle {
+            font-size: 1.3rem;
+            color: #fff;
+            margin-bottom: 2rem;
+            font-weight: 400;
+        }
+
+        .hero-text p {
+            font-size: 1rem;
+            color: #bbb;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-images {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        .hero-images img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 12px;
+            transition: transform 0.3s;
+            background: #222;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .hero-images img:hover {
+            transform: scale(1.05) translateY(-10px);
+        }
+
+        /* Content Sections */
+        .content-wrapper {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.8rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, #ff4757, #ff6b81);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-header .underline {
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, #ff4757, transparent);
+        }
+
+        /* About Section */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 4rem;
+            margin-bottom: 4rem;
+        }
+
+        .about-text {
+            font-size: 1.05rem;
+            line-height: 1.9;
+            color: #ccc;
+        }
+
+        .about-text p {
+            margin-bottom: 1.5rem;
+        }
+
+        .about-sidebar {
+            background: linear-gradient(135deg, #151515, #1a1a1a);
+            padding: 2.5rem;
+            border-radius: 12px;
+            border: 1px solid #222;
+        }
+
+        .about-sidebar h3 {
+            color: #ff4757;
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+
+        .stat-item {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #222;
+        }
+
+        .stat-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .stat-label {
+            color: #777;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .download-btn {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, #ff4757, #ff6b81);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+            box-shadow: 0 5px 15px rgba(255, 71, 87, 0.3);
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 71, 87, 0.4);
+        }
+
+        /* Skills Grid */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .skill-item {
+            background: linear-gradient(135deg, #151515, #1a1a1a);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid #222;
+            transition: all 0.3s;
+        }
+
+        .skill-item:hover {
+            border-color: #ff4757;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 71, 87, 0.2);
+        }
+
+        .skill-item h3 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: #ff4757;
+        }
+
+        .skill-item p {
+            color: #bbb;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        /* Experience Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 3rem;
+            margin-bottom: 4rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 2px;
+            background: linear-gradient(180deg, #ff4757, transparent);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, #151515, #1a1a1a);
+            border-radius: 12px;
+            border: 1px solid #222;
+            transition: all 0.3s;
+        }
+
+        .timeline-item:hover {
+            border-color: #ff4757;
+            transform: translateX(10px);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -3.5rem;
+            top: 2rem;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ff4757;
+            border: 3px solid #0a0a0a;
+        }
+
+        .timeline-item h3 {
+            font-size: 1.5rem;
+            color: #ff4757;
+            margin-bottom: 0.3rem;
+        }
+
+        .timeline-item .role {
+            font-size: 1.1rem;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-item .date {
+            color: #777;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            background: #222;
+            border-radius: 20px;
+        }
+
+        .timeline-item ul {
+            color: #bbb;
+            line-height: 1.7;
+            margin-left: 1.2rem;
+        }
+
+        .timeline-item li {
+            margin-bottom: 0.8rem;
+        }
+
+        /* Achievements Grid */
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .achievement-card {
+            background: linear-gradient(135deg, #151515, #1a1a1a);
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid #222;
+            transition: all 0.3s;
+        }
+
+        .achievement-card:hover {
+            border-color: #ff4757;
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(255, 71, 87, 0.2);
+        }
+
+        .achievement-card h4 {
+            color: #ff4757;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .achievement-card p {
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        /* Projects Grid */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .project-card {
+            background: linear-gradient(135deg, #151515, #1a1a1a);
+            padding: 2.5rem;
+            border-radius: 12px;
+            border: 1px solid #222;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #ff4757, #ff6b81);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .project-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .project-card:hover {
+            border-color: #ff4757;
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(255, 71, 87, 0.2);
+        }
+
+        .project-card h3 {
+            color: #ff4757;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .project-card p {
+            color: #bbb;
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .project-card a {
+            color: #ff4757;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .project-card a:hover {
+            color: #ff6b81;
+        }
+
+        /* Contact Section */
+        .contact-container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .contact-box {
+            padding: 3rem;
+            background: linear-gradient(135deg, #151515, #1a1a1a);
+            border-radius: 12px;
+            margin: 2rem 0;
+            border: 1px solid #222;
+        }
+
+        .contact-box p {
+            font-size: 1.5rem;
+            color: #ff4757;
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-box a {
+            color: #ff4757;
+            text-decoration: none;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .social-links a {
+            color: #e0e0e0;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 0.8rem 1.5rem;
+            border: 1px solid #333;
+            border-radius: 50px;
+        }
+
+        .social-links a:hover {
+            color: #ff4757;
+            border-color: #ff4757;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 71, 87, 0.2);
+        }
+
+        /* Footer */
+        footer {
+            background: #151515;
+            padding: 2rem 5%;
+            text-align: center;
+            border-top: 1px solid #222;
+            margin-top: 4rem;
+        }
+
+        footer p {
+            color: #777;
+        }
+
+        /* Subsection Headers */
+        .subsection-header {
+            margin: 4rem 0 2rem;
+        }
+
+        .subsection-header h3 {
+            font-size: 2rem;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        .subsection-header .line {
+            width: 60px;
+            height: 2px;
+            background: #ff4757;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .hero-content,
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-text h1 {
+                font-size: 3rem;
+            }
+
+            .hero-images {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .timeline {
+                padding-left: 2rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            nav {
+                gap: 1rem;
+                justify-content: center;
+            }
+
+            nav a {
+                font-size: 0.75rem;
+            }
+
+            .hero-text h1 {
+                font-size: 2rem;
+            }
+
+            .section-header h2 {
+                font-size: 2rem;
+            }
+
+            .page {
+                padding: 100px 5% 40px;
+            }
+
+            .timeline {
+                padding-left: 1.5rem;
+            }
+
+            .timeline-item {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a onclick="showPage('home')" class="active">Home</a>
+            <a onclick="showPage('about')">About</a>
+            <a onclick="showPage('work')">Work</a>
+            <a onclick="showPage('contact')">Contact</a>
+        </nav>
+    </header>
+
+    <!-- HOME PAGE -->
+    <div id="home" class="page active">
+        <div class="hero">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>DEVANSH<br>BORDIA</h1>
+                    <p class="subtitle">Security Engineer | Vulnerability Researcher</p>
+                    <p>Security Engineer with 4+ years of professional experience spanning penetration testing, vulnerability research, and developer security enablement. Hands-on expertise across web applications, mobile (Android/iOS), cloud infrastructure, and API security.</p>
+                    <p>Recognized as Bugcrowd MVP Q2 2020 with 4 published CVEs and 500+ vulnerabilities discovered across 100+ assessments. Partners with engineering teams to integrate security into SDLC through threat modeling, secure code review, and security tooling implementation.</p>
+                    <p>Author of AWS Security Series with 1M+ impressions on Twitter. Published articles for Detectify, ProjectDiscovery, Trickest, WPSec, and Spearbit.</p>
+                </div>
+                <div class="hero-images">
+                    <img src="Devansh Bordia_PhonePe_Photo.jpg" alt="Profile 1">
+                    <img src="Devansh Bordia_PhonePe_Photo.jpg" alt="Profile 2">
+                    <img src="Devansh Bordia_PhonePe_Photo.jpg" alt="Profile 3">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ABOUT PAGE -->
+    <div id="about" class="page">
+        <div class="content-wrapper">
+            <div class="section-header">
+                <h2>About Me</h2>
+                <div class="underline"></div>
+            </div>
+
+            <div class="about-grid">
+                <div class="about-text">
+                    <p>Hey World, I am Devansh Bordia, a Security Engineer with a passion for finding and fixing security vulnerabilities.</p>
+                    <p>With over 4 years of professional experience, I specialize in penetration testing, vulnerability research, and helping development teams build secure software. I've conducted 100+ security assessments across web applications, mobile platforms, cloud infrastructure, and DevSecOps pipelines.</p>
+                    <p>My work has resulted in discovering 500+ vulnerabilities including critical issues like Full Account Takeovers, SSRF, Privilege Escalation, and SQL Injection across numerous enterprise applications. I've been recognized with 4 published CVEs and was awarded Bugcrowd MVP Q2 2020.</p>
+                    <p>I'm passionate about developer security enablement, working closely with engineering teams to integrate security into the SDLC through threat modeling, secure code reviews, and implementing security tooling. I also create educational content, having authored the AWS Security Series that reached 1M+ impressions on Twitter.</p>
+                    <a href="https://drive.google.com/file/d/1AjuQOF-DV96eWzwKyuq2_IcH1ZpopHDu/view?usp=sharing" class="download-btn">Download Resume</a>
+                </div>
+
+                <div class="about-sidebar">
+                    <h3>Quick Facts</h3>
+                    <div class="stat-item">
+                        <div class="stat-label">Experience</div>
+                        <div class="stat-value">4+ Years</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Assessments</div>
+                        <div class="stat-value">100+</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Vulnerabilities</div>
+                        <div class="stat-value">500+</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">CVEs Published</div>
+                        <div class="stat-value">4</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Hall of Fames</div>
+                        <div class="stat-value">30+</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection-header">
+                <h3>Technical Skills</h3>
+                <div class="line"></div>
+            </div>
+
+            <div class="skills-grid">
+                <div class="skill-item">
+                    <h3>Application Security</h3>
+                    <p>Web, Mobile (Android/iOS), API, and Thick Client Penetration Testing. Threat Modeling and Secure Code Review following OWASP ASVS standards.</p>
+                </div>
+                <div class="skill-item">
+                    <h3>Cloud & Infrastructure</h3>
+                    <p>AWS Penetration Testing & Configuration Review, Terraform, CloudFormation, Docker/Kubernetes Security, and container assessments.</p>
+                </div>
+                <div class="skill-item">
+                    <h3>DevSecOps</h3>
+                    <p>SAST (Semgrep, SonarQube), DAST (OWASP ZAP, Burp Enterprise), SCA (Snyk, Dependency-Check), Secret Scanning (Trufflehog, GitLeaks), CI/CD Security.</p>
+                </div>
+                <div class="skill-item">
+                    <h3>Container & K8s Security</h3>
+                    <p>Container security assessments, Kubernetes penetration testing, RBAC configurations, network policies, and security hardening.</p>
+                </div>
+                <div class="skill-item">
+                    <h3>Infrastructure as Code</h3>
+                    <p>Security review of Terraform and CloudFormation templates. IaC scanning with Checkov and tfsec for misconfigurations.</p>
+                </div>
+                <div class="skill-item">
+                    <h3>Programming</h3>
+                    <p>Python and Bash scripting for security automation, tool development, and exploit creation.</p>
+                </div>
+            </div>
+
+            <div class="subsection-header">
+                <h3>Certifications</h3>
+                <div class="line"></div>
+            </div>
+
+            <div class="achievements-grid">
+                <div class="achievement-card">
+                    <h4>eCPPTv2</h4>
+                    <p>Certified Professional Penetration Tester</p>
+                </div>
+                <div class="achievement-card">
+                    <h4>eWPTXv2</h4>
+                    <p>Web Application Penetration Tester eXtreme</p>
+                </div>
+                <div class="achievement-card">
+                    <h4>AWS SAA</h4>
+                    <p>Solution Architect Associate</p>
+                </div>
+            </div>
+
+            <div class="subsection-header">
+                <h3>Achievements & Recognition</h3>
+                <div class="line"></div>
+            </div>
+
+            <div class="achievements-grid">
+                <div class="achievement-card">
+                    <h4>Bugcrowd MVP Q2 2020</h4>
+                    <p>Top Security Researcher Recognition</p>
+                </div>
+                <div class="achievement-card">
+                    <h4>Strike Top Hackers</h4>
+                    <p>Quarterly Recognition (2x)</p>
+                </div>
+                <div class="achievement-card">
+                    <h4>AWS Security Series</h4>
+                    <p>1M+ Impressions on Twitter</p>
+                </div>
+                <div class="achievement-card">
+                    <h4>CVE-2022-24789</h4>
+                    <p>Published Vulnerability</p>
+                </div>
+                <div class="achievement-card">
+                    <h4>CVE-2022-26589</h4>
+                    <p>Published Vulnerability</p>
+                </div>
+                <div class="achievement-card">
+                    <h4>CVE-2022-26588</h4>
+                    <p>Published Vulnerability</p>
+                </div>
+                <div class="achievement-card">
+                    <h4>CVE-2021-44321</h4>
+                    <p>Published Vulnerability</p>
+                </div>
+                <div class="achievement-card">
+                    <h4>Infosec Writeups</h4>
+                    <p>Multiple Newsletter Features</p>
+                </div>
+            </div>
+
+            <div class="subsection-header">
+                <h3>Hall of Fame</h3>
+                <div class="line"></div>
+            </div>
+
+            <div class="achievements-grid">
+                <div class="achievement-card"><h4>MasterCard</h4></div>
+                <div class="achievement-card"><h4>Gusto</h4></div>
+                <div class="achievement-card"><h4>Bitdefender</h4></div>
+                <div class="achievement-card"><h4>HealthifyMe</h4></div>
+                <div class="achievement-card"><h4>SAP Concur</h4></div>
+                <div class="achievement-card"><h4>Hiver</h4></div>
+                <div class="achievement-card"><h4>Xfinity</h4></div>
+                <div class="achievement-card"><h4>Sophos</h4></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- WORK PAGE -->
+    <div id="work" class="page">
+        <div class="content-wrapper">
+            <div class="section-header">
+                <h2>Professional Experience</h2>
+                <div class="underline"></div>
+            </div>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h3>Bugcrowd</h3>
+                    <div class="role">Application Security Engineer (Triage)</div>
+                    <div class="date">October 2024 - January 2025</div>
+                    <ul>
+                        <li>Carefully assessed incoming bug reports to verify accuracy, reproducibility, and alignment with program scope</li>
+                        <li>Classified reported vulnerabilities by type (XSS, SQL injection, etc.) and determined priority based on severity, impact, and exploitability</li>
+                        <li>Compiled validated vulnerabilities into comprehensive reports with technical analysis and remediation recommendations</li>
+                    </ul>
+                </div>
+
+                <div class="timeline-item">
+                    <h3>HackerOne</h3>
+                    <div class="role">Product Security Analyst → Pod Lead (Triage)</div>
+                    <div class="date">October 2022 - July 2024</div>
+                    <ul>
+                        <li>Promoted to Pod Lead, managing team of 5 analysts and overseeing 200+ bug bounty programs including Reddit, eBay, Sony, and Bumble</li>
+                        <li>Served as technical escalation point for complex vulnerabilities, providing final assessment on severity disputes and edge cases</li>
+                        <li>Triaged vulnerability reports across web, mobile, cloud, and smart contract assets, assessing severity within each organization's threat model</li>
+                        <li>Coordinated with Customer Success teams and clients as technical SPOC, ensuring smooth triage workflows and timely resolution</li>
+                    </ul>
+                </div>
+
+                <div class="timeline-item">
+                    <h3>Strike</h3>
+                    <div class="role">Security Consultant (Part-Time)</div>
+                    <div class="date">February 2022 - Present</div>
+                    <ul>
+                        <li>Conducted 100+ security assessments across web, mobile (Android/iOS), cloud infrastructure, and DevSecOps pipeline reviews for enterprise clients</li>
+                        <li>Discovered 300+ vulnerabilities including Full Account Takeovers, IDOR, SSRF, Privilege Escalation, SQL Injection, XSS, and Information Disclosures</li>
+                        <li>Performed comprehensive CI/CD pipeline security assessments reviewing GitHub Actions and GitLab CI workflows for secrets exposure, access control issues, and missing security gates</li>
+                        <li>Assessed client SAST, DAST, and SCA implementations for coverage gaps, misconfigurations, and bypass opportunities</li>
+                        <li>Reviewed Infrastructure as Code (Terraform, CloudFormation) for security misconfigurations including overly permissive IAM policies and public exposure risks</li>
+                        <li>Conducted container security assessments and Kubernetes penetration testing identifying privileged containers, RBAC misconfigurations, and missing network policies</li>
+                    </ul>
+                </div>
+
+                <div class="timeline-item">
+                    <h3>Payatu Security Consulting</h3>
+                    <div class="role">Co-Lead Security Consultant (AppSec & Cloud)</div>
+                    <div class="date">June 2021 - September 2022</div>
+                    <ul>
+                        <li>Led 100+ application security engagements across web, mobile (Android/iOS), API, and cloud infrastructure for enterprise clients</li>
+                        <li>Performed security assessments for fintech clients focusing on payment flows, transaction security, and banking API authentication mechanisms</li>
+                        <li>Provided recommendations on integrating security tooling (Semgrep, OWASP ZAP, Snyk, Trufflehog) into CI/CD workflows to shift security left</li>
+                        <li>Collaborated with development teams post-assessment to provide remediation guidance, conduct code-level walkthroughs, and verify fixes</li>
+                        <li>Conducted secure code review sessions against OWASP ASVS and performed threat modeling workshops with product and engineering teams</li>
+                        <li>Established security champion relationships within client engineering teams, enabling earlier vulnerability identification in development cycle</li>
+                    </ul>
+                </div>
+
+                <div class="timeline-item">
+                    <h3>Bugcrowd</h3>
+                    <div class="role">Bug Hunter</div>
+                    <div class="date">February 2020 - Present</div>
+                    <ul>
+                        <li>Acknowledged by 30+ companies including MasterCard, Hiver, Xfinity, SAP Concur, Bitdefender, HealthifyMe, and Gusto for reporting critical security issues</li>
+                        <li>Awarded Bugcrowd MVP Q2 2020 for outstanding contributions to bug bounty programs</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="subsection-header">
+                <h3>Publications & Content</h3>
+                <div class="line"></div>
+            </div>
+
+            <div class="projects-grid">
+                <div class="project-card">
+                    <h3>AWS Security Series</h3>
+                    <p>Comprehensive Twitter thread series on AWS security vulnerabilities and best practices. Achieved 1M+ impressions and multiple features in Infosec Writeups newsletter.</p>
+                </div>
+                <div class="project-card">
+                    <h3>Detectify Blog</h3>
+                    <p>Published technical articles on AWS security vulnerabilities and cloud security research.</p>
+                </div>
+                <div class="project-card">
+                    <h3>ProjectDiscovery</h3>
+                    <p>Contributed content on Subfinder and security reconnaissance techniques.</p>
+                </div>
+                <div class="project-card">
+                    <h3>Trickest</h3>
+                    <p>Technical write-ups on security automation and workflow optimization.</p>
+                </div>
+                <div class="project-card">
+                    <h3>WPSec</h3>
+                    <p>Articles focused on WordPress security vulnerabilities and hardening techniques.</p>
+                </div>
+                <div class="project-card">
+                    <h3>Spearbit</h3>
+                    <p>Advanced security research and smart contract security topics.</p>
+                </div>
+            </div>
+
+            <div class="subsection-header">
+                <h3>Education</h3>
+                <div class="line"></div>
+            </div>
+
+            <div class="projects-grid">
+                <div class="project-card">
+                    <h3>B.Tech Computer Science</h3>
+                    <p><strong>Amity University</strong></p>
+                    <p>2017 - 2021</p>
+                    <p>CGPA: 7.22</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTACT PAGE -->
+    <div id="contact" class="page">
+        <div class="content-wrapper">
+            <div class="section-header">
+                <h2>Get in Touch</h2>
+                <div class="underline"></div>
+            </div>
+
+            <div class="contact-container">
+                <p style="color: #bbb; font-size: 1.1rem; margin-bottom: 2rem;">I'm always open to discussing security research, collaboration opportunities, consulting work, or just chatting about cybersecurity. Feel free to reach out!</p>
+                
+                <div class="contact-box">
+                    <p><a href="mailto:devansh3008@gmail.com">devansh3008@gmail.com</a></p>
+                    <p style="font-size: 1.2rem; margin-top: 1rem;"><a href="tel:+918058591718">+91 805 859 1718</a></p>
+                </div>
+
+                <div class="social-links">
+                    <a href="https://www.linkedin.com/in/devanshbordia/" target="_blank">LinkedIn</a>
+                    <a href="https://twitter.com/devansh3008" target="_blank">Twitter</a>
+                    <a href="https://github.com/devansh3008" target="_blank">GitHub</a>
+                    <a href="https://bugcrowd.com/anglecutter/" target="_blank">Bugcrowd</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© Copyright 2026 - Devansh Bordia | Security Engineer</p>
+    </footer>
+
+    <script>
+        function showPage(pageId, el = null) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+
+            // Remove active class from all nav links
+            const navLinks = document.querySelectorAll('nav a');
+            navLinks.forEach(link => link.classList.remove('active'));
+
+            // Show selected page (if exists)
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
+            } else {
+                console.warn("Page not found:", pageId);
+                return;
+            }
+
+            // Add active class to clicked nav link
+            if (el) {
+                el.classList.add('active');
+            } else {
+                // Auto-detect correct nav link if loaded from URL hash
+                navLinks.forEach(link => {
+                    if (link.getAttribute("onclick")?.includes(pageId)) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+
+            // Scroll to top smoothly
+            window.scrollTo({ top: 0, behavior: "smooth" });
+
+            // Update URL hash
+            history.replaceState(null, null, "#" + pageId);
+        }
+
+        // Enable hash navigation on load
+        window.addEventListener("DOMContentLoaded", () => {
+            const hash = window.location.hash.replace("#", "");
+            if (hash) {
+                showPage(hash);
+            }
+        });
+    </script>
+</body>
+</html>
