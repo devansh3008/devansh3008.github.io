@@ -18,7 +18,6 @@
             line-height: 1.6;
         }
 
-        /* Header Navigation */
         header {
             position: fixed;
             top: 0;
@@ -69,7 +68,6 @@
             color: #ff4757;
         }
 
-        /* Page Container */
         .page {
             display: none;
             min-height: 100vh;
@@ -86,7 +84,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Hero Section */
         .hero {
             min-height: calc(100vh - 180px);
             display: flex;
@@ -130,16 +127,14 @@
         }
 
         .hero-images {
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
         }
 
         .hero-images img {
             width: 100%;
-            max-width: 500px;
-            height: auto;
-            aspect-ratio: 1;
+            height: 400px;
             object-fit: cover;
             border-radius: 12px;
             transition: transform 0.3s;
@@ -151,7 +146,6 @@
             transform: scale(1.05) translateY(-10px);
         }
 
-        /* Content Sections */
         .content-wrapper {
             max-width: 1400px;
             margin: 0 auto;
@@ -178,7 +172,6 @@
             background: linear-gradient(90deg, #ff4757, transparent);
         }
 
-        /* About Section */
         .about-grid {
             display: grid;
             grid-template-columns: 2fr 1fr;
@@ -254,7 +247,6 @@
             box-shadow: 0 10px 25px rgba(255, 71, 87, 0.4);
         }
 
-        /* Skills Grid */
         .skills-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -288,7 +280,6 @@
             line-height: 1.7;
         }
 
-        /* Experience Timeline */
         .timeline {
             position: relative;
             padding-left: 3rem;
@@ -364,7 +355,6 @@
             margin-bottom: 0.8rem;
         }
 
-        /* Achievements Grid */
         .achievements-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -398,7 +388,6 @@
             font-size: 0.9rem;
         }
 
-        /* Projects Grid */
         .projects-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -461,7 +450,55 @@
             color: #ff6b81;
         }
 
-        /* Contact Section */
+        /* Testimonial specific styling */
+        .testimonial-card {
+            background: linear-gradient(135deg, #151515, #1a1a1a);
+            padding: 2.5rem;
+            border-radius: 12px;
+            border: 1px solid #222;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: -20px;
+            left: 20px;
+            font-size: 8rem;
+            color: #ff4757;
+            opacity: 0.1;
+            font-family: Georgia, serif;
+            line-height: 1;
+        }
+
+        .testimonial-card:hover {
+            border-color: #ff4757;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 71, 87, 0.2);
+        }
+
+        .testimonial-text {
+            color: #ccc;
+            font-size: 1rem;
+            line-height: 1.9;
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            color: #ff4757;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .testimonial-role {
+            color: #777;
+            font-size: 0.85rem;
+        }
+
         .contact-container {
             max-width: 800px;
             margin: 0 auto;
@@ -514,7 +551,6 @@
             box-shadow: 0 5px 15px rgba(255, 71, 87, 0.2);
         }
 
-        /* Footer */
         footer {
             background: #151515;
             padding: 2rem 5%;
@@ -527,7 +563,6 @@
             color: #777;
         }
 
-        /* Subsection Headers */
         .subsection-header {
             margin: 4rem 0 2rem;
         }
@@ -544,7 +579,6 @@
             background: #ff4757;
         }
 
-        /* Responsive */
         @media (max-width: 968px) {
             .hero-content,
             .about-grid {
@@ -556,7 +590,7 @@
             }
 
             .hero-images {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr);
             }
 
             .timeline {
@@ -614,7 +648,7 @@
                     <h1>DEVANSH<br>BORDIA</h1>
                     <p class="subtitle">Security Engineer | Vulnerability Researcher</p>
                     <p>Security Engineer with 4+ years of professional experience spanning penetration testing, vulnerability research, and developer security enablement. Hands-on expertise across web applications, mobile (Android/iOS), cloud infrastructure, and API security.</p>
-                    <p>Recognized as Bugcrowd MVP Q2 2020 with 4 published CVEs and 500+ vulnerabilities discovered across 100+ assessments. Partners with engineering teams to integrate security into SDLC through threat modeling, secure code review, and security tooling implementation.</p>
+                    <p>Recognized as Bugcrowd MVP Q2 2020 with 4 published CVEs and 1000+ vulnerabilities discovered across 300+ assessments. Partners with engineering teams to integrate security into SDLC through threat modeling, secure code review, and security tooling implementation.</p>
                     <p>Author of AWS Security Series with 1M+ impressions on Twitter. Published articles for Detectify, ProjectDiscovery, Trickest, WPSec, and Spearbit.</p>
                 </div>
                 <div class="hero-images">
@@ -635,10 +669,10 @@
             <div class="about-grid">
                 <div class="about-text">
                     <p>Hey World, I am Devansh Bordia, a Security Engineer with a passion for finding and fixing security vulnerabilities.</p>
-                    <p>With over 4 years of professional experience, I specialize in penetration testing, vulnerability research, and helping development teams build secure software. I've conducted 100+ security assessments across web applications, mobile platforms, cloud infrastructure, and DevSecOps pipelines.</p>
-                    <p>My work has resulted in discovering 500+ vulnerabilities including critical issues like Full Account Takeovers, SSRF, Privilege Escalation, and SQL Injection across numerous enterprise applications. I've been recognized with 4 published CVEs and was awarded Bugcrowd MVP Q2 2020.</p>
+                    <p>With over 4 years of professional experience, I specialize in penetration testing, vulnerability research, and helping development teams build secure software. I've conducted 300+ security assessments across web applications, mobile platforms, cloud infrastructure, and DevSecOps pipelines.</p>
+                    <p>My work has resulted in discovering 1000+ vulnerabilities including critical issues like Full Account Takeovers, SSRF, Privilege Escalation, and SQL Injection across numerous enterprise applications. I've been recognized with 4 published CVEs and was awarded Bugcrowd MVP Q2 2020.</p>
                     <p>I'm passionate about developer security enablement, working closely with engineering teams to integrate security into the SDLC through threat modeling, secure code reviews, and implementing security tooling. I also create educational content, having authored the AWS Security Series that reached 1M+ impressions on Twitter.</p>
-                    <a href="https://drive.google.com/file/d/1AjuQOF-DV96eWzwKyuq2_IcH1ZpopHDu/view?usp=sharing" class="download-btn">Download Resume</a>
+                    <a href="https://drive.google.com/file/d/1M2-ulijtOk3Y-PPgtMtmFJicmPHPaqwk/view?usp=sharing" class="download-btn">Download Resume</a>
                 </div>
 
                 <div class="about-sidebar">
@@ -653,7 +687,7 @@
                     </div>
                     <div class="stat-item">
                         <div class="stat-label">Vulnerabilities</div>
-                        <div class="stat-value">500+</div>
+                        <div class="stat-value">1000+</div>
                     </div>
                     <div class="stat-item">
                         <div class="stat-label">CVEs Published</div>
@@ -737,19 +771,19 @@
                     <p>1M+ Impressions on Twitter</p>
                 </div>
                 <div class="achievement-card">
-                    <h4><a href="https://nvd.nist.gov/vuln/detail/CVE-2022-24789" target="_blank" style="color: #ff4757; text-decoration: none;">CVE-2022-24789</a></h4>
-                    <p>C1 CMS SSRF Vulnerability</p>
-                </div>
-                <div class="achievement-card">
-                    <h4><a href="https://nvd.nist.gov/vuln/detail/CVE-2022-26589" target="_blank" style="color: #ff4757; text-decoration: none;">CVE-2022-26589</a></h4>
+                    <h4>CVE-2022-24789</h4>
                     <p>Published Vulnerability</p>
                 </div>
                 <div class="achievement-card">
-                    <h4><a href="https://nvd.nist.gov/vuln/detail/CVE-2022-26588" target="_blank" style="color: #ff4757; text-decoration: none;">CVE-2022-26588</a></h4>
+                    <h4>CVE-2022-26589</h4>
                     <p>Published Vulnerability</p>
                 </div>
                 <div class="achievement-card">
-                    <h4><a href="https://nvd.nist.gov/vuln/detail/CVE-2021-44321" target="_blank" style="color: #ff4757; text-decoration: none;">CVE-2021-44321</a></h4>
+                    <h4>CVE-2022-26588</h4>
+                    <p>Published Vulnerability</p>
+                </div>
+                <div class="achievement-card">
+                    <h4>CVE-2021-44321</h4>
                     <p>Published Vulnerability</p>
                 </div>
                 <div class="achievement-card">
@@ -773,6 +807,25 @@
                 <div class="achievement-card"><h4>Xfinity</h4></div>
                 <div class="achievement-card"><h4>Sophos</h4></div>
             </div>
+
+            <div class="subsection-header">
+                <h3>Testimonials</h3>
+                <div class="line"></div>
+            </div>
+
+            <div class="projects-grid">
+                <div class="testimonial-card">
+                    <p class="testimonial-text">Devansh is one of the rare security engineers that I've worked with Deep technical knowledge, real world offensive experience, and someone who takes the work seriously. Would vouch for him without hesitation.</p>
+                    <div class="testimonial-author">Luke Stephens (hakluke)</div>
+                    <div class="testimonial-role">Founder, Haksec.io & HackerContent.com</div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-text">I’ve had the opportunity to collaborate with Devansh on multiple pentesting projects for clients worldwide, and he consistently demonstrates strong commitment to his work. He actively challenges himself and focuses on continuous learning and improvement.One of our most successful engagements together resulted in identifying numerous high-impact vulnerabilities for the client. Devansh is not only an outstanding professional but also an exceptional collaborator who elevates the entire team. from him and ensures the successful delivery of every project he undertakes.</p>
+                    <div class="testimonial-author">Yesenia Trejo</div>
+                    <div class="testimonial-role">Lead Security Engineer, Strike</div>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -814,7 +867,7 @@
                     <div class="date">February 2022 - Present</div>
                     <ul>
                         <li>Conducted 100+ security assessments across web, mobile (Android/iOS), cloud infrastructure, and DevSecOps pipeline reviews for enterprise clients</li>
-                        <li>Discovered 300+ vulnerabilities including Full Account Takeovers, IDOR, SSRF, Privilege Escalation, SQL Injection, XSS, and Information Disclosures</li>
+                        <li>Discovered 1000+ vulnerabilities including Full Account Takeovers, IDOR, SSRF, Privilege Escalation, SQL Injection, XSS, and Information Disclosures</li>
                         <li>Performed comprehensive CI/CD pipeline security assessments reviewing GitHub Actions and GitLab CI workflows for secrets exposure, access control issues, and missing security gates</li>
                         <li>Assessed client SAST, DAST, and SCA implementations for coverage gaps, misconfigurations, and bypass opportunities</li>
                         <li>Reviewed Infrastructure as Code (Terraform, CloudFormation) for security misconfigurations including overly permissive IAM policies and public exposure risks</li>
@@ -856,37 +909,26 @@
                 <div class="project-card">
                     <h3>AWS Security Series</h3>
                     <p>Comprehensive Twitter thread series on AWS security vulnerabilities and best practices. Achieved 1M+ impressions and multiple features in Infosec Writeups newsletter.</p>
-                    <a href="https://twitter.com/devansh3008" target="_blank">View on Twitter →</a>
-                </div>
-                <div class="project-card">
-                    <h3>WPSec - WordPress Security</h3>
-                    <p>Best Practices for Securing Your WordPress Site - Comprehensive guide covering common vulnerabilities, hardening techniques, and security configurations.</p>
-                    <a href="https://blog.wpsec.com/best-practices-for-securing-your-wordpress-site-2/" target="_blank">Read Article →</a>
                 </div>
                 <div class="project-card">
                     <h3>Detectify Blog</h3>
                     <p>Published technical articles on AWS security vulnerabilities and cloud security research.</p>
-                    <a href="https://blog.detectify.com/" target="_blank">View Blog →</a>
                 </div>
                 <div class="project-card">
                     <h3>ProjectDiscovery</h3>
-                    <p>Contributed content on Subfinder and security reconnaissance techniques for the ProjectDiscovery community.</p>
-                    <a href="https://projectdiscovery.io/blog" target="_blank">View Blog →</a>
+                    <p>Contributed content on Subfinder and security reconnaissance techniques.</p>
                 </div>
                 <div class="project-card">
                     <h3>Trickest</h3>
                     <p>Technical write-ups on security automation and workflow optimization.</p>
-                    <a href="https://trickest.com/blog" target="_blank">View Blog →</a>
+                </div>
+                <div class="project-card">
+                    <h3>WPSec</h3>
+                    <p>Articles focused on WordPress security vulnerabilities and hardening techniques.</p>
                 </div>
                 <div class="project-card">
                     <h3>Spearbit</h3>
                     <p>Advanced security research and smart contract security topics.</p>
-                    <a href="https://spearbit.com/" target="_blank">View Blog →</a>
-                </div>
-                <div class="project-card">
-                    <h3>Medium</h3>
-                    <p>Regular articles on cybersecurity, penetration testing, and security research.</p>
-                    <a href="https://medium.com/@devansh3008" target="_blank">Read Articles →</a>
                 </div>
             </div>
 
@@ -919,14 +961,14 @@
                 
                 <div class="contact-box">
                     <p><a href="mailto:devansh3008@gmail.com">devansh3008@gmail.com</a></p>
+                    <p style="font-size: 1.2rem; margin-top: 1rem;"><a href="tel:+918058591718">+91 805 859 1718</a></p>
                 </div>
 
                 <div class="social-links">
                     <a href="https://www.linkedin.com/in/devanshbordia/" target="_blank">LinkedIn</a>
-                    <a href="https://twitter.com/devansh3008" target="_blank">Twitter</a>
+                    <a href="https://twitter.com/devansh_bordia" target="_blank">Twitter</a>
                     <a href="https://github.com/devansh3008" target="_blank">GitHub</a>
-                    <a href="https://bugcrowd.com/Devansh-Bordia" target="_blank">Bugcrowd</a>
-                    <a href="https://medium.com/@devansh3008" target="_blank">Medium</a>
+                    <a href="https://bugcrowd.com/h/Devansh-Bordia" target="_blank">Bugcrowd</a>
                 </div>
             </div>
         </div>
@@ -938,15 +980,12 @@
 
     <script>
         function showPage(pageId, el = null) {
-            // Hide all pages
             const pages = document.querySelectorAll('.page');
             pages.forEach(page => page.classList.remove('active'));
 
-            // Remove active class from all nav links
             const navLinks = document.querySelectorAll('nav a');
             navLinks.forEach(link => link.classList.remove('active'));
 
-            // Show selected page (if exists)
             const targetPage = document.getElementById(pageId);
             if (targetPage) {
                 targetPage.classList.add('active');
@@ -955,11 +994,9 @@
                 return;
             }
 
-            // Add active class to clicked nav link
             if (el) {
                 el.classList.add('active');
             } else {
-                // Auto-detect correct nav link if loaded from URL hash
                 navLinks.forEach(link => {
                     if (link.getAttribute("onclick")?.includes(pageId)) {
                         link.classList.add('active');
@@ -967,14 +1004,10 @@
                 });
             }
 
-            // Scroll to top smoothly
             window.scrollTo({ top: 0, behavior: "smooth" });
-
-            // Update URL hash
             history.replaceState(null, null, "#" + pageId);
         }
 
-        // Enable hash navigation on load
         window.addEventListener("DOMContentLoaded", () => {
             const hash = window.location.hash.replace("#", "");
             if (hash) {
