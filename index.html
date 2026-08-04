@@ -579,6 +579,137 @@
             background: #ff4757;
         }
 
+        .blog-layout {
+            max-width: 940px;
+            margin: 0 auto;
+        }
+
+        .blog-intro {
+            padding: 1rem 0 3rem;
+            border-bottom: 1px solid #222;
+            margin-bottom: 3rem;
+        }
+
+        .blog-intro h1 {
+            font-size: clamp(2.4rem, 6vw, 4.8rem);
+            line-height: 1.08;
+            letter-spacing: -1.5px;
+            margin: 1rem 0 1.25rem;
+            color: #fff;
+        }
+
+        .blog-eyebrow {
+            color: #ff4757;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-size: .82rem;
+            font-weight: 700;
+        }
+
+        .blog-intro p {
+            color: #aaa;
+            font-size: 1.15rem;
+            max-width: 720px;
+        }
+
+        .blog-card {
+            display: block;
+            padding: 2.25rem;
+            background: linear-gradient(135deg, #151515, #1a1a1a);
+            border: 1px solid #292929;
+            border-radius: 12px;
+            color: inherit;
+            cursor: pointer;
+            transition: transform .3s, border-color .3s, box-shadow .3s;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-6px);
+            border-color: #ff4757;
+            box-shadow: 0 14px 35px rgba(255, 71, 87, .16);
+        }
+
+        .blog-card h3 {
+            color: #fff;
+            font-size: 1.65rem;
+            line-height: 1.25;
+            margin: .5rem 0 .85rem;
+        }
+
+        .blog-card p { color: #aaa; max-width: 720px; }
+        .blog-read-more {
+            display: inline-block;
+            color: #ff6b81;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: .8rem;
+            font-weight: 700;
+            margin-top: 1.25rem;
+        }
+
+        .blog-article {
+            color: #c9c9c9;
+            font-size: 1.05rem;
+            line-height: 1.85;
+        }
+
+        .blog-article h2,
+        .blog-article h3 {
+            color: #fff;
+            line-height: 1.25;
+            margin: 3.5rem 0 1.25rem;
+        }
+
+        .blog-article h2 { font-size: 2rem; }
+        .blog-article h3 { font-size: 1.4rem; }
+        .blog-article p { margin: 0 0 1.35rem; }
+        .blog-article ul,
+        .blog-article ol { margin: 0 0 1.5rem 1.5rem; }
+        .blog-article li { margin-bottom: .6rem; }
+        .blog-article a { color: #ff6b81; }
+        .blog-article strong { color: #fff; }
+        .blog-article code {
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+            background: #202020;
+            color: #ff9ba6;
+            padding: .15rem .35rem;
+            border-radius: 4px;
+            font-size: .87em;
+        }
+        .blog-article pre {
+            overflow-x: auto;
+            background: #111;
+            border: 1px solid #292929;
+            border-left: 3px solid #ff4757;
+            padding: 1.25rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+        .blog-article pre code { background: none; padding: 0; color: #ddd; }
+        .blog-article img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            margin: 2rem auto;
+            border: 1px solid #292929;
+            border-radius: 10px;
+        }
+        .blog-article table {
+            width: 100%;
+            border-collapse: collapse;
+            display: block;
+            overflow-x: auto;
+            margin: 1.75rem 0;
+            font-size: .9rem;
+        }
+        .blog-article th, .blog-article td {
+            text-align: left;
+            padding: .8rem;
+            border: 1px solid #303030;
+            vertical-align: top;
+        }
+        .blog-article th { color: #fff; background: #1a1a1a; }
+
         @media (max-width: 968px) {
             .hero-content,
             .about-grid {
@@ -636,6 +767,7 @@
             <a onclick="showPage('home')" class="active">Home</a>
             <a onclick="showPage('about')">About</a>
             <a onclick="showPage('work')">Work</a>
+            <a onclick="showPage('blog')">Blog</a>
             <a onclick="showPage('contact')">Contact</a>
         </nav>
     </header>
@@ -962,6 +1094,34 @@
         </div>
     </div>
 
+    <!-- BLOG INDEX -->
+    <div id="blog" class="page">
+        <div class="content-wrapper">
+            <div class="section-header">
+                <h2>Blog</h2>
+                <div class="underline"></div>
+            </div>
+            <div class="blog-card" role="link" tabindex="0" onclick="showPage('blog-vibe-coded-security-review')" onkeydown="if(event.key === 'Enter') showPage('blog-vibe-coded-security-review')">
+                <div class="blog-eyebrow">Security Research</div>
+                <h3>Will Your Vibe-Coded App Survive a Security Review?</h3>
+                <p>Ten recurring security patterns found in publicly accessible AI-generated SaaS applications—and how to prevent them before launch.</p>
+                <span class="blog-read-more">Read article →</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- BLOG ARTICLE -->
+    <div id="blog-vibe-coded-security-review" class="page">
+        <div class="blog-layout">
+            <div class="blog-intro">
+                <div class="blog-eyebrow">Security Research</div>
+                <h1>Will Your Vibe-Coded App Survive a Security Review?</h1>
+                <p>Ten recurring security patterns found in publicly accessible AI-generated SaaS applications—and how to prevent them before launch.</p>
+            </div>
+            <article id="blog-article" class="blog-article" aria-live="polite">Loading article…</article>
+        </div>
+    </div>
+
     <!-- CONTACT PAGE -->
     <div id="contact" class="page">
         <div class="content-wrapper">
@@ -1027,7 +1187,72 @@
             if (hash) {
                 showPage(hash);
             }
+
+            fetch("blog-vibe-coded-app-security-review.md")
+                .then(response => {
+                    if (!response.ok) throw new Error("Unable to load article");
+                    return response.text();
+                })
+                .then(markdown => {
+                    const imagePaths = {
+                        "attachments/Pasted%20image%2020260804014343.png": "blog-assets/vibe-coded-app-security-hero.png",
+                        "attachments/Pasted%20image%2020260803171918.png": "blog-assets/vibe-coded-app-security-stack.png",
+                        "attachments/Pasted%20image%2020260803172026.png": "blog-assets/vibe-coded-app-security-state-1.png",
+                        "attachments/Pasted%20image%2020260803172043.png": "blog-assets/vibe-coded-app-security-state-2.png"
+                    };
+                    Object.entries(imagePaths).forEach(([from, to]) => markdown = markdown.replaceAll(from, to));
+                    document.getElementById("blog-article").innerHTML = renderMarkdown(markdown);
+                })
+                .catch(() => {
+                    document.getElementById("blog-article").textContent = "The article could not be loaded. Please refresh and try again.";
+                });
         });
+
+        function renderMarkdown(markdown) {
+            const escapeHtml = value => value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            const inline = value => {
+                value = escapeHtml(value);
+                value = value.replace(/!\[([^\]]*)\]\(([^\s)]+)\)/g, '<img src="$2" alt="$1">');
+                value = value.replace(/\[([^\]]+)\]\((https?:[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+                value = value.replace(/`([^`]+)`/g, '<code>$1</code>');
+                value = value.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+                return value.replace(/_([^_]+)_/g, '<em>$1</em>');
+            };
+            const lines = markdown.replace(/\r/g, "").split("\n");
+            let html = "", i = 0;
+            const cells = line => line.split("|").slice(1, -1).map(cell => inline(cell.trim()));
+            while (i < lines.length) {
+                const line = lines[i];
+                if (!line.trim()) { i++; continue; }
+                if (line.startsWith("```")) {
+                    const code = []; i++;
+                    while (i < lines.length && !lines[i].startsWith("```")) code.push(lines[i++]);
+                    i++;
+                    html += `<pre><code>${escapeHtml(code.join("\n"))}</code></pre>`;
+                } else if (/^#{2,3} /.test(line)) {
+                    const level = line.match(/^#+/)[0].length;
+                    html += `<h${level}>${inline(line.slice(level + 1))}</h${level}>`; i++;
+                } else if (/^---+$/.test(line)) {
+                    html += "<hr>"; i++;
+                } else if (line.startsWith("|") && i + 1 < lines.length && /^\|?\s*:?-{3,}/.test(lines[i + 1])) {
+                    const headers = cells(line); i += 2;
+                    let rows = "";
+                    while (i < lines.length && lines[i].startsWith("|")) {
+                        rows += `<tr>${cells(lines[i]).map(cell => `<td>${cell}</td>`).join("")}</tr>`; i++;
+                    }
+                    html += `<table><thead><tr>${headers.map(cell => `<th>${cell}</th>`).join("")}</tr></thead><tbody>${rows}</tbody></table>`;
+                } else if (/^[-*] /.test(line)) {
+                    const items = [];
+                    while (i < lines.length && /^[-*] /.test(lines[i])) items.push(`<li>${inline(lines[i++].slice(2))}</li>`);
+                    html += `<ul>${items.join("")}</ul>`;
+                } else {
+                    const paragraph = [];
+                    while (i < lines.length && lines[i].trim() && !lines[i].startsWith("```") && !/^#{2,3} /.test(lines[i]) && !/^[-*] /.test(lines[i]) && !lines[i].startsWith("|") && !/^---+$/.test(lines[i])) paragraph.push(lines[i++]);
+                    html += `<p>${inline(paragraph.join(" "))}</p>`;
+                }
+            }
+            return html;
+        }
     </script>
 </body>
 </html>
