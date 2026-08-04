@@ -668,6 +668,7 @@
         .blog-article li { margin-bottom: .6rem; }
         .blog-article a { color: #ff6b81; }
         .blog-article strong { color: #fff; }
+        .blog-article em { color: #aaa; }
         .blog-article code {
             font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
             background: #202020;
@@ -1216,7 +1217,8 @@
                 value = value.replace(/\[([^\]]+)\]\((https?:[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
                 value = value.replace(/`([^`]+)`/g, '<code>$1</code>');
                 value = value.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-                return value.replace(/_([^_]+)_/g, '<em>$1</em>');
+                value = value.replace(/_([^_]+)_/g, '<em>$1</em>');
+                return value.replace(/\*([^*]+)\*/g, '<em>$1</em>');
             };
             const lines = markdown.replace(/\r/g, "").split("\n");
             let html = "", i = 0;

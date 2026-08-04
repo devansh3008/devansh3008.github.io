@@ -1,10 +1,12 @@
 ![](attachments/Pasted%20image%2020260804014343.png)
 
+*By [Devansh](https://devansh3008.github.io) & [Aniket](https://awwfensive.github.io)*
+
 AI-assisted development has fundamentally changed how software is built. Founders can now go from an idea to a production-ready SaaS application in hours instead of weeks, with AI generating everything from the frontend to the database schema and deployment configuration.
 
 That shift has also changed the security landscape. Over the past year, security researchers have repeatedly uncovered AI-generated applications exposing customer data, secrets, and business logic through the same handful of implementation mistakes. The question is no longer _whether_ AI can build software, it is whether the software it builds is secure enough for production.
 
-To answer that question, I set out to evaluate the security posture of publicly accessible vibe-coded SaaS applications. Rather than looking for novel exploits or zero-days, the goal was to identify the security issues an attacker would realistically encounter during a routine black-box assessment.
+To answer that question, we set out to evaluate the security posture of publicly accessible vibe-coded SaaS applications. Rather than looking for novel exploits or zero-days, the goal was to identify the security issues an attacker would realistically encounter during a routine black-box assessment.
 
 The results were strikingly consistent. The same **10 vulnerability patterns** appeared repeatedly across different applications, industries, and founders. Every application evaluated exhibited at least one issue from this recurring set.
 
@@ -12,7 +14,7 @@ None of the findings required source code, privileged access, or sophisticated e
 
 This research documents those ten recurring vulnerability patterns, why they continue to appear across AI-generated applications, and what they reveal about the current state of AI-assisted software development.
 
-## The Stack I Kept Seeing
+## The Stack We Kept Seeing
 
 ![](attachments/Pasted%20image%2020260803171918.png)
 
@@ -73,21 +75,21 @@ For **full-stack builders** such as Lovable, Bolt.new, and v0, the risk shifts t
 
 Neither category is inherently less secure—they simply present different attack surfaces. This is why the findings in this post focus on Lovable-, Bolt.new-, and v0-style tools: the research evaluates **deployed applications**, not IDE sessions.
 
-Because these applications consistently converged on the same technology stack, I stopped treating each as a unique target and instead applied the same security checklist across every assessment. No source code, no privileged access, and no custom tooling—just black-box testing with an intercepting proxy, a free-tier account, and requests beyond what the UI exposed.
+Because these applications consistently converged on the same technology stack, we stopped treating each as a unique target and instead applied the same security checklist across every assessment. No source code, no privileged access, and no custom tooling—just black-box testing with an intercepting proxy, a free-tier account, and requests beyond what the UI exposed.
 
 The remainder of this post breaks down the ten recurring vulnerability patterns that emerged from that process.
 
 ---
 
-## How I Tested Each Layer of the Stack
+## How We Tested Each Layer of the Stack
 
-Since the apps I looked at were all built on more or less the same stack, I stopped treating each one as a fresh target and started treating it as the same research checklist, run six times, once per layer. No source access, no special credentials, just a proxy, a free-tier signup, and the willingness to send requests the UI never intended to send. Here's the full breakdown, layer by layer.
+Since the apps we looked at were all built on more or less the same stack, we stopped treating each one as a fresh target and started treating it as the same research checklist, run six times, once per layer. No source access, no special credentials, just a proxy, a free-tier signup, and the willingness to send requests the UI never intended to send. Here's the full breakdown, layer by layer.
 
 ### Frontend : Next.js (App Router), React, TypeScript, Tailwind
 
 The App Router blurs the line between "what the server computed" and "what the browser needs," and that blur is exactly where over-fetching lives.
 
-**What I tested:**
+**What we tested:**
 
 - Clicked through every feature once with Burp/Caido sitting in the background, logging every request, then diffed the raw network response against what the UI actually rendered
 - Paid close attention to React Server Component payloads specifically, since RSC streams serialize the full data object passed to the component tree, not just the props the JSX consumes
@@ -105,7 +107,7 @@ The App Router blurs the line between "what the server computed" and "what the b
 
 This is where authorization is supposed to actually happen, and where "the demo works" most often substitutes for "the request is checked."
 
-**What I tested:**
+**What we tested:**
 
 - Replayed captured `PATCH`/`POST` requests padded with extra fields the UI never exposed, one field at a time, to isolate exactly which ones the ORM `update()` call would silently accept
 - Swapped resource IDs (`orderId`, `documentId`, `invoiceId`) for sequential neighbors and for IDs leaked elsewhere in the app (support tickets, invite links, public review author fields)
@@ -127,14 +129,14 @@ This is where authorization is supposed to actually happen, and where "the demo 
 
 Supabase auto-generates a REST API directly over Postgres, which means the database's authorization model _is_ the application's authorization model. If RLS is wrong, there is no second line of defense.
 
-**What I tested:**
+**What we tested:**
 
 - Queried PostgREST tables directly with a captured anon key + a low-privilege JWT, bypassing the Next.js layer entirely: `GET /rest/v1/<table>?select=*`
-- Tried this against every table name I could infer from API responses or client bundle strings, not just the obvious ones like `orders`
+- Tried this against every table name we could infer from API responses or client bundle strings, not just the obvious ones like `orders`
 - Checked whether RLS was enabled per table at all (it's off by default per table in Supabase, not just per project), and whether existing policies were scoped to `auth.uid()` or left as permissive catch-alls
 - Guessed storage object paths using the `{userId}/{filename}` convention visible in upload responses, and checked bucket-level visibility (public vs. private)
-- Left Realtime/WebSocket channels open during actual usage, logged the full synced state object, then edited my own copy locally and re-sent it to see if the server recomputed the state or just accepted it as ground truth
-- Where Realtime synced other players'/users' objects through the same channel, tried the same edit against someone else's record, not just my own
+- Left Realtime/WebSocket channels open during actual usage, logged the full synced state object, then edited our own copy locally and re-sent it to see if the server recomputed the state or just accepted it as ground truth
+- Where Realtime synced other players'/users' objects through the same channel, tried the same edit against someone else's record, not just our own
 
 **Typically vulnerable to:** missing or misconfigured Row-Level Security (cross-tenant data exposure), public storage buckets, and client-authoritative real-time state.
 
@@ -146,7 +148,7 @@ Supabase auto-generates a REST API directly over Postgres, which means the datab
 
 LLM calls are metered, per-token infrastructure bolted onto apps that otherwise treat "backend" as free. Nobody budgets for what an unthrottled proxy route actually costs at scale.
 
-**What I tested:**
+**What we tested:**
 
 - Grepped shipped JS bundles (`_next/static/chunks/*.js`) for key-shaped strings matching provider prefixes, to catch client-side calls using credentials that should never have left the server
 - Burst-tested `/api/ai/*` or equivalent proxy routes the same way as auth endpoints, unauthenticated and authenticated, to see if per-user or per-IP throttling existed
@@ -161,7 +163,7 @@ LLM calls are metered, per-token infrastructure bolted onto apps that otherwise 
 
 **Why this layer:** this is the layer where a security bug stops being a security bug and starts being an accounting discrepancy.
 
-**What I tested:**
+**What we tested:**
 
 - Located webhook endpoints (`/api/webhooks/stripe`, `/api/webhooks/resend`) via client bundle strings or predictable naming
 - Posted hand-crafted events (`checkout.session.completed`, `subscription.updated`, `invoice.paid`) with no `Stripe-Signature` header, to see if the handler trusted the raw JSON body before checking anything
@@ -178,7 +180,7 @@ LLM calls are metered, per-token infrastructure bolted onto apps that otherwise 
 
 This is where the app's infrastructure identity lives, and it's the layer most founders assume is "someone else's problem" because Vercel manages the hosting.
 
-**What I tested:**
+**What we tested:**
 
 - Pulled apart deployed `_next/static` bundles for hardcoded secrets using a simple grep for key-shaped strings
 - Checked whether `.env` values were correctly scoped, `NEXT_PUBLIC_`-prefixed variables ship to the browser by design, and it's common to see a variable prefixed that way out of habit when it should never have left the server
@@ -191,11 +193,11 @@ This is where the app's infrastructure identity lives, and it's the layer most f
 
 None of this needed custom tooling or source access, just the same six checklists, run in the same order, against every target, adjusted only for the framework-specific quirks noted above.
 
-So yes, I ran this exact process across the full pool of applications, and these were the patterns that kept showing up, again and again, in the order I tend to hit them:
+So yes, we ran this exact process across the full pool of applications, and these were the patterns that kept showing up, again and again, in the order we tend to hit them:
 
 ## Fingerprinting the Stack
 
-One thing became obvious early in the research: most targets shared the same underlying architecture. Manually confirming the stack and checking for the same recurring misconfigurations quickly became repetitive, so I built `vibe_stack_scanner.py` to automate the reconnaissance.
+One thing became obvious early in the research: most targets shared the same underlying architecture. Manually confirming the stack and checking for the same recurring misconfigurations quickly became repetitive, so we built `vibe_stack_scanner.py` to automate the reconnaissance.
 
 Given a target URL, the scanner fingerprints the application stack and performs a series of passive security checks in seconds. Passive mode uses only standard **GET** requests—the same traffic generated by a browser while loading the application—making it suitable for safely identifying common security signals without modifying application state.
 
@@ -218,17 +220,17 @@ The scanner automates the repetitive parts of the assessment, allowing manual ef
 
 That's 5 checks that run automatically and passively on any target, plus 5 more that are gated behind `--active` and, for the last two, require your own authenticated session, because they send state-changing or unusual traffic. All ten map one-to-one to the findings below.
 
-Because the majority of applications followed nearly identical architectural patterns, this fingerprinting step significantly reduced the time spent on initial reconnaissance. Once the stack was identified, I could apply the same structured testing methodology to each layer instead of treating every application as an entirely new target. The tool acted as a starting point of the research; the findings discussed throughout this article were ultimately confirmed through manual verification.
+Because the majority of applications followed nearly identical architectural patterns, this fingerprinting step significantly reduced the time spent on initial reconnaissance. Once the stack was identified, we could apply the same structured testing methodology to each layer instead of treating every application as an entirely new target. The tool acted as a starting point of the research; the findings discussed throughout this article were ultimately confirmed through manual verification.
 
 Vibe-stack-scanner Tool: `<link here>`
 
 ---
 
-After stack confirmation and manually identifying vulnerabilities, these were the patterns that kept recurring across the applications I looked at:
+After stack confirmation and manually identifying vulnerabilities, these were the patterns that kept recurring across the applications we looked at:
 
 ## 1. Over-Fetching: APIs That Return the Whole Database Row
 
-The first thing I do on any Next.js target is read the raw network responses, not the rendered page — React Server Components serialize way more than the UI displays. On a review page that only rendered a username and avatar, the actual response looked like this:
+The first thing we do on any Next.js target is read the raw network responses, not the rendered page — React Server Components serialize way more than the UI displays. On a review page that only rendered a username and avatar, the actual response looked like this:
 
 ```json
 "user": {
@@ -254,7 +256,7 @@ ref: https://specopssoft.com/blog/hashing-algorithm-cracking-bcrypt-passwords/
 
 ## 2. Mass Assignment: Endpoints That Accept Whatever You Send
 
-Once I see an API over-returning data, I test whether it also over-accepts it. On one app, the profile update endpoint looked ordinary:
+Once we see an API over-returning data, we test whether it also over-accepts it. On one app, the profile update endpoint looked ordinary:
 
 ```http
 PATCH /api/users/me
@@ -265,7 +267,7 @@ PATCH /api/users/me
 }
 ```
 
-I added a field the UI never exposed:
+We added a field the UI never exposed:
 
 ```http
 PATCH /api/users/me
@@ -287,9 +289,9 @@ Chained with an upload endpoint that returned a **public** blob URL, the full pa
 
 ## 3. Trusting Client-Reported State in Real-Time Apps
 
-The mass-assignment pattern above shows up in an even more dangerous form in real-time apps. On a multiplayer quiz game built on Firebase, I watched the WebSocket traffic right after joining a lobby, and the server pushed down the **entire quiz dataset**, every question and every correct answer, before the round even started. The frontend just wasn't rendering it yet.
+The mass-assignment pattern above shows up in an even more dangerous form in real-time apps. On a multiplayer quiz game built on Firebase, we watched the WebSocket traffic right after joining a lobby, and the server pushed down the **entire quiz dataset**, every question and every correct answer, before the round even started. The frontend just wasn't rendering it yet.
 
-Digging into the synchronized player object, fields like `score`, `powerUps`, and `currentQuestion` weren't just readable, they were writable from the client and accepted back by the server as ground truth. Editing my own player object directly and re-syncing it let me set:
+Digging into the synchronized player object, fields like `score`, `powerUps`, and `currentQuestion` weren't just readable, they were writable from the client and accepted back by the server as ground truth. Editing our own player object directly and re-syncing it let us set:
 
 ```json
 {
@@ -303,7 +305,7 @@ Digging into the synchronized player object, fields like `score`, `powerUps`, an
 ```
 
 ![](attachments/Pasted%20image%2020260803172026.png)
-...without answering a single question. Because every participant's state synced through the same unauthenticated channel, the same edit worked on **other players' records**, meaning I could hand myself the win, or take it away from someone else, mid-match. 
+...without answering a single question. Because every participant's state synced through the same unauthenticated channel, the same edit worked on **other players' records**, meaning we could hand ourselves the win, or take it away from someone else, mid-match.
 ![](attachments/Pasted%20image%2020260803172043.png)
 **Business impact:** For any product where outcomes carry stakes, leaderboards, cash prizes, ranked matchmaking, loyalty points redeemable for real value, client-writable state is a direct fraud vector, not just a fairness bug. It's the difference between "a customer complained" and "a customer won a cash prize by editing a JSON object," which is a very different conversation with your payments processor and your legal team.
 
@@ -311,7 +313,7 @@ Digging into the synchronized player object, fields like `score`, `powerUps`, an
 
 ## 4. Missing or Misconfigured Row-Level Security (RLS)
 
-Supabase gives you Postgres with RLS built in, but it's **off by default** on new tables, and it's common to see it enabled with a policy like `USING (true)` just to unblock a feature during development, then never revisited. I test this by hitting the auto-generated **PostgREST** endpoint directly with a low-privilege session token and querying tables that should be scoped to the current user.
+Supabase gives you Postgres with RLS built in, but it's **off by default** on new tables, and it's common to see it enabled with a policy like `USING (true)` just to unblock a feature during development, then never revisited. We test this by hitting the auto-generated **PostgREST** endpoint directly with a low-privilege session token and querying tables that should be scoped to the current user.
 
 ```http
 GET /rest/v1/orders?select=*
@@ -327,7 +329,7 @@ If RLS isn't enforced, this returns every row in the table, not just the caller'
 
 ## 5. IDOR in API Routes and Server Actions
 
-Classic, and still everywhere: `/api/orders/[id]` or a server action `getOrder(orderId)` fetches by primary key with no ownership check. I test this by taking any resource ID that legitimately belongs to me, incrementing/decrementing it, or swapping it for an ID leaked elsewhere in the app (support tickets, invite links, review authors), and replaying the request as myself.
+Classic, and still everywhere: `/api/orders/[id]` or a server action `getOrder(orderId)` fetches by primary key with no ownership check. We test this by taking any resource ID that legitimately belongs to us, incrementing/decrementing it, or swapping it for an ID leaked elsewhere in the app (support tickets, invite links, review authors), and replaying the request as ourselves.
 
 **Business impact:** Sequential or guessable IDs turn a single account into a scraper for your entire customer base, invoices, support conversations, uploaded documents. For B2B products, this is precisely the finding that shows up in a prospective enterprise customer's pentest before purchase report and stalls a deal in procurement.
 
@@ -349,7 +351,7 @@ The other version of this: the backend uses the Supabase **service-role key** (w
 
 ## 7. Public Storage Buckets and Unrestricted Uploads
 
-Supabase Storage buckets are private by default, but I regularly find them flipped to **public** to sidestep a CORS/signed-URL headache during development. Combined with predictable object paths (`/uploads/{userId}/{filename}`), enumerating other users' uploaded files is trivial. Upload handlers also frequently skip MIME-type and size validation, and, per finding `#2`, happily accept any URL an upload endpoint returns as input to unrelated, sensitive fields.
+Supabase Storage buckets are private by default, but we regularly find them flipped to **public** to sidestep a CORS/signed-URL headache during development. Combined with predictable object paths (`/uploads/{userId}/{filename}`), enumerating other users' uploaded files is trivial. Upload handlers also frequently skip MIME-type and size validation, and, per finding `#2`, happily accept any URL an upload endpoint returns as input to unrelated, sensitive fields.
 
 **Business impact:** For any product handling ID documents, contracts, medical records, or financial statements, an increasingly common "AI features" use case, a public bucket is an unencrypted, unauthenticated leak of exactly the documents customers trusted you to protect. That's the category of incident that ends up in a breach-notification letter with your company's name on it, not a GitHub issue.
 
@@ -357,7 +359,7 @@ Supabase Storage buckets are private by default, but I regularly find them flipp
 
 ## 8. No Rate Limiting on Auth, Reset, or AI-Proxy Endpoints
 
-Middleware is where rate limiting is supposed to live, and it's the layer most often skipped — it has zero visible effect while a solo dev is building the app. I test login, signup, password-reset, and any `/api/ai/*` proxy route with a simple burst:
+Middleware is where rate limiting is supposed to live, and it's the layer most often skipped — it has zero visible effect while a solo dev is building the app. We test login, signup, password-reset, and any `/api/ai/*` proxy route with a simple burst:
 
 ```bash
 for i in {1..200}; do curl -s -o /dev/null -w "%{http_code}\n" -X POST https://target.app/api/auth/login -d '{"email":"a@a.com","password":"guess'"$i"'"}'; done
@@ -416,7 +418,7 @@ curl -X POST https://target.app/api/webhooks/stripe \
 
 ## The Pattern Behind the Pattern
 
-- None of these findings required custom tooling, a proxy, dev tools, and the willingness to send a request the UI never intended to send got me all ten. That's the point, **AI coding agents optimize for "the feature works," not "the feature is safe against a hostile client."**
+- None of these findings required custom tooling, a proxy, dev tools, and the willingness to send a request the UI never intended to send got us all ten. That's the point, **AI coding agents optimize for "the feature works," not "the feature is safe against a hostile client."**
 - Authorization checks, response DTOs, and server-side state validation are invisible in a working demo. They only matter once someone stops using the app the way it was designed to be used which is exactly when nobody's watching for them, and exactly when it shows up as a support ticket, a chargeback, or a lost deal instead of a line in a code review.
 
 ## Fixing the Workflow, Not Just the Output
@@ -424,7 +426,7 @@ curl -X POST https://target.app/api/webhooks/stripe \
 - The default AI-assisted build loop is: `write feature → run app → fix bugs → deploy.`
 - Security is an afterthought, caught (if at all) in a post-hoc review of a diff nobody has time to fully read.
 
-The higher-leverage fix is pushing these rules into the agent's context before it writes a line of code. Claude, Cursor, Cline, Goose, and OpenCode all support project-level instruction files loaded automatically into context. A condensed version of what I now drop into every vibe-coded project before letting an agent touch the backend:
+The higher-leverage fix is pushing these rules into the agent's context before it writes a line of code. Claude, Cursor, Cline, Goose, and OpenCode all support project-level instruction files loaded automatically into context. A condensed version of what we now drop into every vibe-coded project before letting an agent touch the backend:
 
 ```markdown
 # AI Security Skill
